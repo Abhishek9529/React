@@ -2,6 +2,7 @@ import {useEffect, useRef, useState} from 'react'
 import Ex2 from './components/StopWatch';
 import ClickCounter from './components/ClickCounter';
 import InputFocus from './components/InputFocus';
+import Video from './components/Video';
 function App() {
   // use of ref its persist the value  
   // const value = useRef(0)
@@ -29,7 +30,8 @@ function App() {
         <button onClick={handleDecrement}>-</button> */}
         
         {/* <ClickCounter/> */}
-        <InputFocus/>
+        {/* <InputFocus/> */}
+        <Video/>
       </div>
     </>
   )
