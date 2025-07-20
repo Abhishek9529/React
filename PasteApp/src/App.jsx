@@ -37,7 +37,7 @@ function App() {
 
   return (
     <>
-      <div className="w-full h-screen flex flex-col justify-center items-center p-4 bg-gray-800 text-white">
+      <div className="w-full h-screen mx-auto flex flex-col">
       <RouterProvider router={router}/>
       </div>  
 

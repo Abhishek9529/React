@@ -1,43 +1,29 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import {useDispatch, useSelector} from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useSearchParams } from 'react-router-dom';
 import { addToPastes, updateToPastes } from '../features/pasteSlice';
 
-    
+
 
 const Home = () => {
-    
-    
+    const [title, setTitle] = useState('');
+    const [value, setValue] = useState('');
     const [searchParams, setSearchParams] = useSearchParams();
-    
     const pasteId = searchParams.get('pasteId');
     const dispatch = useDispatch()
 
-    const pastes = useSelector((state)=> (state.paste.pastes))
-    console.log(pastes);
-    console.log(pasteId);
-    const editPaste = pastes.filter((paste) =>{
-        return paste._id === pasteId
-    })
-
-    console.log(editPaste);
-
-    let [title, setTitle] = useState('');
-    const [value, setValue] = useState('');
-
-     useEffect(()=>{
-      if(editPaste.length > 0){
-        title = editPaste[0].title
-    }
-     }, [pasteId])
-
-    // useCallback(()=>{
+    const pastes = useSelector((state) => (state.paste.pastes))
     
-    // },[editPaste])
+    useEffect(() => {
+        if (pasteId) {
+        const findPaste = pastes.find((paste) => paste._id === pasteId )
+            setTitle(findPaste.title)
+            setValue(findPaste.content)
+        }
+    }, [pasteId])
 
-    
-    
-    function createPaste(){
+
+    function createPaste() {
         const paste = {
             title: title,
             content: value,
@@ -45,12 +31,12 @@ const Home = () => {
             createdAt: new Date().toISOString()
         }
 
-        if(pasteId){
+        if (pasteId) {
             // update
             dispatch(updateToPastes(paste))
-        }else{
+        } else {
             // create
-             if(title != '' && value != '')  dispatch(addToPastes(paste))
+            if (title != '' && value != '') dispatch(addToPastes(paste))
         }
 
         // after createtion/updation 
@@ -60,57 +46,40 @@ const Home = () => {
     }
 
     return (
-        <div >
-            <div className='flex flex-row space-x-4'>
-                {
-                    pasteId != null ? 
-                    <input type="text"
-                    placeholder='Enter The Updated val of Title...'
-                    value={value}
-                    onChange={e => setTitle(e.target.value)}
-                />
-                : 
-                <input type="text"
-                    placeholder='Enter The Title...'
+        <div className='w-9/12 mx-auto  h-[450px]' >
+            <div className=' flex flex-row justify-between'>
+                <input className='border border-gray-400 outline-none px-2 w-10/12 rounded-md' type="text"
+                    placeholder='Title...'
                     value={title}
                     onChange={e => setTitle(e.target.value)}
                 />
-                
-                }
-                
-                <button onClick={createPaste} className='border px-2 rounded-md'>
+
+                <button onClick={createPaste} className='border border-gray-400 px-4 py-2 rounded-md bg-blue-500 text-white text-sm font-semibold'>
                     {
                         pasteId ? "Update paste" : "Create my Paste"
                     }
                 </button>
             </div>
 
-            <div className='mt-4'>
-                {
-                pasteId != null ?
-                <textarea className='border rounded-md p-2'
-                placeholder='Enter Content here...'
-                value={value}
-                
-                onChange={e=> setValue(e.target.value)}
-                rows={18}
-                cols={45}
+            <div className='mt-4 border border-gray-400 rounded-md'>
+                <div className='flex flex-row justify-between px-4 py-2 border-b-1 border-gray-400'>
+                    <div className='flex flex-row'>
+                        <p>o</p>
+                        <p>o</p>
+                        <p>o</p>
+                    </div>
+                    <div>
+                        copy
+                    </div>
+                </div>
+                <textarea className=' rounded-md p-2 outline-none'
+                    placeholder='Enter Content here...'
+                    value={value}
+                    onChange={e => setValue(e.target.value)}
+                    rows={13}
+                    cols={125}
                 ></textarea>
-                :
-                <textarea className='border rounded-md p-2'
-                placeholder='Enter Content here...'
-                value={value}
-                onChange={e=> setValue(e.target.value)}
-                rows={18}
-                cols={45}
-                ></textarea>
-                }
-                
             </div>
-
-         
-
-
         </div>
     )
 }
